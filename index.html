@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>starry</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<meta name="description" content="A new type of horoscope app." />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<link rel="icon" href="logo.png">
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://starry.sparkplug.page/" />
+	<meta property="og:title" content="starry" />
+	<meta property="og:description" content="A new type of horoscope app." />
+	<meta property="og:image" content="https://i.imgur.com/uA9K8uX.png" />
+	
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://starry.sparkplug.page/" />
+	<meta property="twitter:title" content="starry" />
+	<meta property="twitter:description" content="A new type of horoscope app." />
+	<meta property="twitter:image" content="https://i.imgur.com/uA9K8uX.png" />
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<div class="all">
+		<div class="setup" id="setup">
+			<p>I was born on <input type="date" id="bday" oninput="change()"> at <input type="time" id="time" oninput="change()"></p>
+			<button onclick="chart()" id="chart" disabled>Chart</button>
+		</div>
+		<div class="reading" id="reading">
+			<div>
+				<p id="horoscope"></p>
+				<div class="progressbar">
+					<label for="soul">Soul</label>
+					<progress id="soul" value="0" max="1"></progress>
+				</div>
+				<div class="progressbar">
+					<label for="society">Society</label>
+					<progress id="society" value="0" max="1"></progress>
+				</div>
+				<div class="progressbar">
+					<label for="energy">Energy</label>
+					<progress id="energy" value="0" max="1"></progress>
+				</div>
+				<div class="progressbar">
+					<label for="luck">Luck</label>
+					<progress id="luck" value="0" max="1"></progress>
+				</div>
+			</div>
+			<button onclick="localStorage.clear(); window.location.reload()">Clear data</button>
+		</div>
+	</div>
+	<script src="app.js"></script>
+</body>
+</html>
