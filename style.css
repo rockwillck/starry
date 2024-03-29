@@ -12,9 +12,10 @@ body {
 	font-family: 'Times New Roman', Times, serif;
 	font-optical-sizing: auto;
 	color: white;
+	overflow: hidden;
 }
 .all {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -38,7 +39,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	text-transform: lowercase;
-	transition: 0.2s;
+	transition: 1s;
+	translate: 0 -100vh;
 }
 .setup > p {
 	text-align: center;
@@ -115,7 +117,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 }
 
 canvas {
-	position: absolute;
+	position: fixed;
 	background-color: rgb(15, 15, 15);
 	left: 0;
 	top: 0;
@@ -129,7 +131,7 @@ canvas {
 }
 
 .reading {
-	position: absolute;
+	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100%;
@@ -139,8 +141,9 @@ canvas {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	scale: 0;
 	flex-direction: column;
+	transition: 1s;
+	translate: 0 100vh;
 }
 .reading > div > p {
 	margin-bottom: 10px;

@@ -17,14 +17,21 @@ if (localStorage.getItem("date") != undefined && localStorage.getItem("time") !=
     document.getElementById("bday").value = localStorage.getItem("date")
     document.getElementById("time").value = localStorage.getItem("time")
     document.getElementById("name").value = localStorage.getItem("name")
-    chart()
+    onload = () => {
+        chart()
+    }
+} else {
+    onload = () => {
+        document.getElementById("setup").style.translate = "0 0"
+    }
 }
 
 var id = 0
 var bday
 var uName = ""
 function chart() {
-    document.getElementById("setup").style.transform = "scale(0)"
+    document.getElementById("setup").style.translate = ""
+    document.getElementById("reading").style.translate = "0 0"
     bdaydate = document.getElementById("bday").value.split("-").map(x => parseInt(x))
     time = document.getElementById("time").value.split(":").map(x => parseInt(x))
     uName = document.getElementById("name").value
@@ -51,10 +58,18 @@ function getSentence(val, own) {
     luckValue = val/0.8048081173%100/100
 
     if (own) {
-        document.getElementById("soul").value = soulValue
-        document.getElementById("society").value = societyValue
-        document.getElementById("energy").value = energyValue
-        document.getElementById("luck").value = luckValue
+        let i = 0
+        intId = setInterval(() => {
+            multiplier = 0.05
+            document.getElementById("soul").value += (soulValue - document.getElementById("soul").value)*multiplier
+            document.getElementById("society").value += (societyValue - document.getElementById("society").value)*multiplier
+            document.getElementById("energy").value += (energyValue - document.getElementById("energy").value)*multiplier
+            document.getElementById("luck").value += (luckValue - document.getElementById("luck").value)*multiplier
+            // if (i == 100) {
+            //     clearInterval(intId)
+            // }
+            // i += 1
+        }, 10)
     }
 
     luckIndex = Math.floor(luckValue*3)
@@ -75,7 +90,15 @@ function getSentence(val, own) {
 
 function horoscope() {
     document.getElementById("reading").style.scale = 1
-    document.getElementById("horoscope").innerText = getSentence(id, true)
+    sentenceStr = getSentence(id, true)
+    let i = 0
+    let intId = setInterval(() => {
+        document.getElementById("horoscope").innerText = sentenceStr.substring(0, i) + sentenceStr.split('').map(char => char !== ' ' ? '٭' : char).join('').substring(i)
+        if (i == sentenceStr.length) {
+            clearInterval(intId)
+        }
+        i++
+    }, 10)
 }
 
 function word(w, val) {
@@ -103,7 +126,8 @@ function connect() {
     <a id="popupIdent"></a>
     <button onclick="copyIdent(this)">copy</button>
     <br>
-    <hr>`
+    <hr>
+    ${localStorage.getItem("friends") == undefined || [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))].length > 0 ? "<p>get starry links from your friends to add them!<p>" : ""}`
     document.getElementById("popup").style.top = "50%"
     document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "").toLowerCase() + "@" + bday.getTime().toString(26)
     document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
@@ -127,4 +151,12 @@ async function copyIdent(btn) {
             btn.innerText = "copy"
         }, 500)
     }
+}
+
+function clearData() {
+    localStorage.clear()
+    document.getElementById("reading").style.translate = ""
+    setTimeout(() => {
+        window.location.reload()
+    }, 1000)
 }
