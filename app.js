@@ -105,7 +105,7 @@ function connect() {
     <br>
     <hr>`
     document.getElementById("popup").style.top = "50%"
-    document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "") + "@" + bday.getTime().toString(26)
+    document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "").toLowerCase() + "@" + bday.getTime().toString(26)
     document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
     if (localStorage.getItem("friends") != undefined) {
         for (friend of [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))]) {
