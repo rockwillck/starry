@@ -127,7 +127,7 @@ function connect() {
     <button onclick="copyIdent(this)">copy</button>
     <br>
     <hr>
-    ${localStorage.getItem("friends") == undefined || [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))].length > 0 ? "<p>get starry links from your friends to add them!<p>" : ""}`
+    ${localStorage.getItem("friends") == undefined || [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))].length == 0 ? "<p>get starry links from your friends to add them!<p>" : ""}`
     document.getElementById("popup").style.top = "50%"
     document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "").toLowerCase() + "@" + bday.getTime().toString(26)
     document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
