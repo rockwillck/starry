@@ -26,10 +26,11 @@
 	<canvas id="canvas"></canvas>
 	<div class="all">
 		<div class="setup" id="setup">
-			<p>I was born on <input type="date" id="bday" oninput="change()"> at <input type="time" id="time" oninput="change()"></p>
+			<p>My name is <input placeholder="name" id="name"> and I was born on <input type="date" id="bday" oninput="change()"> at <input type="time" id="time" oninput="change()"></p>
 			<button onclick="chart()" id="chart" disabled>Chart</button>
 		</div>
 		<div class="reading" id="reading">
+			<button onclick="connect()">Connect</button>
 			<div>
 				<p id="horoscope"></p>
 				<div class="progressbar">
@@ -50,6 +51,16 @@
 				</div>
 			</div>
 			<button onclick="localStorage.clear(); window.location.reload()">Clear data</button>
+		</div>
+		<div class="popup" id="popup">
+			<button onclick="document.getElementById('popup').style.top=''">close</button>
+			<br>
+			<hr>
+			<br>
+			<a id="popupIdent"></a>
+			<button onclick="copyIdent(this)">copy</button>
+			<br>
+			<hr>
 		</div>
 	</div>
 	<script src="bg.js"></script>

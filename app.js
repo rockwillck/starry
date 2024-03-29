@@ -13,19 +13,24 @@ function change() {
     }
 }
 
-if (localStorage.getItem("date") != undefined && localStorage.getItem("time") != undefined) {
+if (localStorage.getItem("date") != undefined && localStorage.getItem("time") != undefined && localStorage.getItem("name") != undefined) {
     document.getElementById("bday").value = localStorage.getItem("date")
     document.getElementById("time").value = localStorage.getItem("time")
+    document.getElementById("name").value = localStorage.getItem("name")
     chart()
 }
 
 var id = 0
+var bday
+var uName = ""
 function chart() {
     document.getElementById("setup").style.transform = "scale(0)"
     bdaydate = document.getElementById("bday").value.split("-").map(x => parseInt(x))
     time = document.getElementById("time").value.split(":").map(x => parseInt(x))
+    uName = document.getElementById("name").value
     localStorage.setItem("date", document.getElementById("bday").value)
     localStorage.setItem("time", document.getElementById("time").value)
+    localStorage.setItem("name", document.getElementById("name").value)
     bday = new Date(`${bdaydate[0].toLocaleString('en-US', {minimumIntegerDigits: 4, useGrouping:false})}-${bdaydate[1].toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}-${bdaydate[2].toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}T${time[0].toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}:${time[1].toLocaleString('en-US', {minimumIntegerDigits: 2, useGrouping:false})}`)
 
     today = new Date();
@@ -39,33 +44,41 @@ function chart() {
     horoscope()
 }
 
-function horoscope() {
-    document.getElementById("reading").style.scale = 1
-    soulValue = Math.floor(id/2356585920)%183/183
-    document.getElementById("soul").value = soulValue
-    societyValue = Math.floor(id/48000)%40/40
-    document.getElementById("society").value = societyValue
-    energyValue = Math.floor(id/35244)%24.39/24.39
-    document.getElementById("energy").value = energyValue
-    luckValue = Math.floor(id/0.8048081173)%100/100
-    document.getElementById("luck").value = luckValue
+function getSentence(val, own) {
+    soulValue = val/2356585920%183/183
+    societyValue = val/48000%40/40
+    energyValue = val/35244%24.39/24.39
+    luckValue = val/0.8048081173%100/100
+
+    if (own) {
+        document.getElementById("soul").value = soulValue
+        document.getElementById("society").value = societyValue
+        document.getElementById("energy").value = energyValue
+        document.getElementById("luck").value = luckValue
+    }
 
     luckIndex = Math.floor(luckValue*3)
     soulIndex = Math.floor(soulValue*3)
 
-    sentence = ""
+    let sentence = ""
     if (luckIndex != 1) {
-        sentence += `Be ${luckIndex == 0 ? word("wary") : word("jubilant")}, for ${luckIndex == 0 ? word("bad") : word("good")} tidings come your way.`
+        sentence += `Be ${luckIndex == 0 ? word("wary", val) : word("jubilant")}, for ${luckIndex == 0 ? word("bad", val) : word("good")} tidings come your way.`
     }
 
-    sentence += ` You${energyValue < 0.5 ? (" " + word("may")) : ""} feel ${energyValue < 0.5 ? word("tired") : word("energized")}, ${societyValue < 0.5 ? (energyValue < 0.5 ? "for the world is against you today." : "but the world is not on your side today.") : (energyValue < 0.5 ? "but the world stands with you today." : "for the world sides with you today.")}`
+    sentence += ` You${energyValue < 0.5 ? (" " + word("may", val)) : ""} feel ${energyValue < 0.5 ? word("tired", val) : word("energized", val)}, ${societyValue < 0.5 ? (energyValue < 0.5 ? "for the world is against you today." : "but the world is not on your side today.") : (energyValue < 0.5 ? "but the world stands with you today." : "for the world sides with you today.")}`
     if (soulIndex != 1) {
-        sentence += ` ${soulIndex == 0 ? word("unfortunately") : word("thankfully")}, your relationship with those around you will be ${soulIndex == 0 ? word("troubled") : word("productive")}.`
+        sentence += ` ${soulIndex == 0 ? word("unfortunately", val) : word("thankfully", val)}, your relationship with those around you will be ${soulIndex == 0 ? word("troubled", val) : word("productive", val)}.`
     }
-    document.getElementById("horoscope").innerText = sentence
+    
+    return sentence
 }
 
-function word(w) {
+function horoscope() {
+    document.getElementById("reading").style.scale = 1
+    document.getElementById("horoscope").innerText = getSentence(id, true)
+}
+
+function word(w, val) {
     synonyms = {
         "wary": ["cautious", "distrustful", "vigilant", "alert", "skeptical"],
         "jubilant": ["elated", "ecstatic", "exuberant", "joyful", "thrilled"],
@@ -79,5 +92,39 @@ function word(w) {
         "troubled": ["distressed", "worried", "concerned", "anxious", "bothered"],
         "productive": ["efficient", "effective", "fruitful", "successful", "prolific"]
     };
-    return synonyms[w][id % synonyms[w].length]
+    return synonyms[w][val % synonyms[w].length]
+}
+
+function connect() {
+    document.getElementById("popup").style.top = "50%"
+    document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "") + "@" + bday.getTime().toString(26)
+    document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
+    document.getElementById("popup").innerHTML = `<button onclick="document.getElementById('popup').style.top=''">close</button>
+    <br>
+    <hr>
+    <br>
+    <a id="popupIdent"></a>
+    <button onclick="copyIdent(this)">copy</button>
+    <br>
+    <hr>`
+    if (localStorage.getItem("friends") != undefined) {
+        for (friend of [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))]) {
+            document.getElementById("popup").innerHTML += `<p>${(friend.split("@")[0])}: ${getSentence(today.getTime() - parseInt(friend.split("@")[1], 26), false).toLowerCase()}</p>`
+        }
+    }
+}
+
+async function copyIdent(btn) {
+    try {
+        await navigator.clipboard.writeText("Add me on starry at: " + document.getElementById("popupIdent").href);
+        btn.innerText = "copied!"
+        setTimeout(() => {
+            btn.innerText = "copy"
+        }, 500)
+    } catch (err) {
+        btn.innerText = "error!"
+        setTimeout(() => {
+            btn.innerText = "copy"
+        }, 500)
+    }
 }

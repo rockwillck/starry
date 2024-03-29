@@ -1,0 +1,5 @@
+<script>
+    prev = localStorage.getItem("friends") == undefined ? "" : localStorage.getItem("friends")
+    localStorage.setItem("friends", prev + "," + window.location.href.split("?")[1])
+    window.location.href = "/"
+</script>
