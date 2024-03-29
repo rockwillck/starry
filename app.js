@@ -96,9 +96,6 @@ function word(w, val) {
 }
 
 function connect() {
-    document.getElementById("popup").style.top = "50%"
-    document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "") + "@" + bday.getTime().toString(26)
-    document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
     document.getElementById("popup").innerHTML = `<button onclick="document.getElementById('popup').style.top=''">close</button>
     <br>
     <hr>
@@ -107,6 +104,9 @@ function connect() {
     <button onclick="copyIdent(this)">copy</button>
     <br>
     <hr>`
+    document.getElementById("popup").style.top = "50%"
+    document.getElementById("popupIdent").innerText = document.getElementById("name").value.replaceAll(" ", ".").replaceAll("@", "") + "@" + bday.getTime().toString(26)
+    document.getElementById("popupIdent").href = "add.html?" + document.getElementById("popupIdent").innerText
     if (localStorage.getItem("friends") != undefined) {
         for (friend of [...new Set(localStorage.getItem("friends").split(",").filter(n => (n != '' && n != document.getElementById("popupIdent").innerText)))]) {
             document.getElementById("popup").innerHTML += `<p>${(friend.split("@")[0])}: ${getSentence(today.getTime() - parseInt(friend.split("@")[1], 26), false).toLowerCase()}</p>`
