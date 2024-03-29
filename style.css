@@ -174,3 +174,13 @@ progress::-webkit-progress-value {
 progress::-moz-progress-bar {
 /* style rules */
 }
+
+a {
+	color: white;
+	text-decoration: none;
+	font-style: italic;
+}
+a:hover {
+	text-decoration: underline;
+	font-style: normal;
+}
