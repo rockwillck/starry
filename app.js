@@ -77,7 +77,7 @@ function getSentence(val, own) {
 
     let sentence = ""
     if (luckIndex != 1) {
-        sentence += `Be ${luckIndex == 0 ? word("wary", val) : word("jubilant")}, for ${luckIndex == 0 ? word("bad", val) : word("good")} tidings come your way.`
+        sentence += `Be ${luckIndex == 0 ? word("wary", val) : word("jubilant", val)}, for ${luckIndex == 0 ? word("bad", val) : word("good", val)} tidings come your way.`
     }
 
     sentence += ` You${energyValue < 0.5 ? (" " + word("may", val)) : ""} feel ${energyValue < 0.5 ? word("tired", val) : word("energized", val)}, ${societyValue < 0.5 ? (energyValue < 0.5 ? "for the world is against you today." : "but the world is not on your side today.") : (energyValue < 0.5 ? "but the world stands with you today." : "for the world sides with you today.")}`
